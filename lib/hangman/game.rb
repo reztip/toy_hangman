@@ -6,27 +6,38 @@ module Hangman
 			File.open(dictionary, "r").each_line do |line|
 				dict << line if line.length.between?(5,12)
 			end
-			@dictionary = dict
-			@word = @dictionary.sample.downcase[0..-3] #strips away \r and \n characters
-			@guesses = 5
-			@guess_map = Array.new(@guesses) {false}
-
-			puts welcome_message
-			game_loop unless game_over?
-
+			@@dictionary = dict
+			play_game
 		end
 
 
 		def welcome_message
-			"Welcome to hangman!"
+			puts "Welcome to hangman!"
+			puts "Your word has a length of #{@word.length}."
+			# "Would you like to play? Y/N"
+		end
+
+		def play_game
+			reset_game
+			welcome_message
+			game_loop unless game_over?
+			play_again = handle_game_over
+			play_again ?  play_game : "Goodbye."
+		end
+
+		def reset_game
+			@word = @@dictionary.sample.downcase[0..-3] #strips away \r and \n characters
+			@guesses = 5
+			@guess_map = Array.new(@guesses) {false}
 		end
 
 		def game_loop
+			# puts @word
 			puts "You have #{@guesses} guesses left."
 			puts "Your word currently looks like: #{represent_word}"
 			print "please enter a letter: "
-			puts ""
-			letter = sanitize_guess(gets.chomp)
+			# puts ""
+			letter = sanitize_guess($stdin.gets.chomp)
 			handle_guess(letter)
 
 		end
@@ -43,20 +54,34 @@ module Hangman
 
 		def sanitize_guess(letter)
 			if ( !('a'..'z').include?(letter.downcase) )
-				puts "Try again, with a letter please."
-			    sanitize_guess(letter)
+			  print "Try again, with a letter please: "
+			  sanitize_guess($stdin.gets.chomp)
 			else
-				letter
+			  letter
 		end
 
 		def handle_guess(letter)
   		  if @word.include?(letter)
   		  	@word.each_with_index do |char, index|
-  		  		@guess_map[index] = true if char == letter 
+  		  		if char == letter
+  		  		  @guess_map[index] = true
+  		  		end
   		  	end
   		  else
-  		  	@guess -= 1
+  		  	@guesses -= 1
   		  end
 		end
+
+		def handle_game_over
+			if @guesses <= 0
+				puts "You lost. sorry. The word was #{@word}."
+			else
+				puts "You win!"
+			end
+
+			puts "Play again?"
+		end
+
 	end
+end
 end
