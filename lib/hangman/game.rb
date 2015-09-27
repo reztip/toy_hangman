@@ -73,13 +73,10 @@ module Hangman
 		end
 
 		def handle_game_over
-			if @guesses <= 0
-				puts "You lost. sorry. The word was #{@word}."
-			else
-				puts "You win!"
-			end
-
+			@guesses <= 0 ? puts "You lost. sorry. The word was #{@word}." : puts "You win!"
 			puts "Play again?"
+			user_answer = gets.chomp.strip.downcase
+			['y', 'yes'].include?(user_answer) ? true : false
 		end
 
 	end
