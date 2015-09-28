@@ -1,13 +1,13 @@
 module Hangman
 	class Game
-		attr_reader :dictionary, :word
+		attr_reader :word, :guesses
 		def initialize(dictionary = "5desk.txt")
 			dict = []
 			File.open(dictionary, "r").each_line do |line|
 				dict << line if line.length.between?(5,12)
 			end
 			@@dictionary = dict
-			play_game
+			reset_game if @word.nil?
 		end
 
 
@@ -20,7 +20,7 @@ module Hangman
 		def play_game
 			reset_game
 			welcome_message
-			game_loop unless game_over?
+			game_loop until game_over?
 			play_again = handle_game_over(['y', 'yes'])
 			play_again ?  play_game : "Goodbye."
 		end
@@ -29,6 +29,7 @@ module Hangman
 			@word = @@dictionary.sample.downcase[0..-3] #strips away \r and \n characters
 			@guesses = 5
 			@guess_map = Array.new(@guesses) {false}
+			# puts @guess_map
 		end
 
 		def game_loop
