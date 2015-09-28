@@ -10,13 +10,13 @@ module Hangman
       end
   	end
 
-  	context "#welcome_message" do
-  		it "welcomes the player" do
-  			game = Game.new
-  			game.stub(:welcome_message) {"Welcome to hangman!"}
-  			expect(game.welcome_message).to eq "Welcome to hangman!"
-  		end
-  	end
+  	# context "#welcome_message" do
+  	# 	it "welcomes the player" do
+  	# 		game = Game.new
+  	# 		game.stub(:welcome_message) {"Welcome to hangman!"}
+  	# 		expect(game.welcome_message).to eq "Welcome to hangman!"
+  	# 	end
+  	# end
 
   	context "#game_over?" do
   		it "knows the game is over if there are no guesses left" do

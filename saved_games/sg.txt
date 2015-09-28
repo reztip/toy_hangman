@@ -1,0 +1,14 @@
+--- !ruby/object:Hangman::Game
+word: unimpressive
+guesses: 5
+guess_map:
+- true
+- true
+- true
+- false
+- true
+- 
+- 
+- true
+- true
+- true

@@ -1,0 +1,9 @@
+--- !ruby/object:Hangman::Game
+word: potato
+guesses: 5
+guess_map:
+- false
+- false
+- false
+- false
+- false
