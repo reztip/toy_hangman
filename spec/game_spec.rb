@@ -30,6 +30,20 @@ module Hangman
   			expect(game.represent_word).not_to eq game.word
   			expect(game.game_over?).to be false
   		end
+
+  		it "knows the game is not over if the word representation is not equal to the actual word" do
+  			game = Game.new
+  			game.stub(:represent_word) {"pot_to"}
+  			game.instance_variable_set(:@word, "potato")
+  			expect(game.game_over?).to be false
+  		end
+
+  		it "knows the game is over if represent_word == @word" do
+  			game = Game.new
+  			game.stub(:represent_word) {"potato"}
+  			game.instance_variable_set(:@word, "potato")
+  			expect(game.game_over?).to be true
+  		end
   	end
 
   	context "#represent_word" do

@@ -4,7 +4,7 @@ module Hangman
 		def initialize(dictionary = "5desk.txt")
 			dict = []
 			File.open(dictionary, "r").each_line do |line|
-				dict << line if line.length.between?(5,12)
+				dict << line if line.length.between?(6,14)
 			end
 			@@dictionary = dict
 			reset_game if @word.nil?
@@ -42,7 +42,6 @@ module Hangman
 			handle_guess(letter)
 
 		end
-		#FIX GAME OVER
 		def game_over?
 			return true if (@guesses <= 0 || represent_word == @word)
 			false
@@ -82,7 +81,7 @@ module Hangman
 		def handle_game_over(acceptable_answers)
 			(@guesses <= 0) ? (puts "You lost. sorry. The word was #{@word}.") : (puts "You win!")
 			puts "Play again? (Yes/No)"
-			user_answer = gets.chomp.strip.downcase
+			user_answer = $stdin.gets.chomp.strip.downcase
 			acceptable_answers.include?(user_answer) ? true : false
 		end
 
