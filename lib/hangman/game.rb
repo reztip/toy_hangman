@@ -21,7 +21,7 @@ module Hangman
 			reset_game
 			welcome_message
 			game_loop unless game_over?
-			play_again = handle_game_over
+			play_again = handle_game_over(['y', 'yes'])
 			play_again ?  play_game : "Goodbye."
 		end
 
@@ -37,11 +37,11 @@ module Hangman
 			puts "Your word currently looks like: #{represent_word}"
 			print "please enter a letter: "
 			# puts ""
-			letter = sanitize_guess($stdin.gets.chomp)
+			letter = sanitize_guess($stdin.gets.chomp.strip)
 			handle_guess(letter)
 
 		end
-
+		#FIX GAME OVER
 		def game_over?
 			return true if (@guesses <= 0 || represent_word == @word)
 			false
@@ -55,14 +55,20 @@ module Hangman
 		def sanitize_guess(letter)
 			if ( !('a'..'z').include?(letter.downcase) )
 			  print "Try again, with a letter please: "
-			  sanitize_guess($stdin.gets.chomp)
+			  x = $stdin.gets.chomp
+			  # puts x
+			  return sanitize_guess(x)
+
 			else
-			  letter
+			  # puts letter
+			  return letter
+			end
 		end
 
 		def handle_guess(letter)
-  		  if @word.include?(letter)
-  		  	@word.each_with_index do |char, index|
+		  # puts letter
+		  if @word.include?(letter)
+  		  	@word.split('').each_with_index do |char, index|
   		  		if char == letter
   		  		  @guess_map[index] = true
   		  		end
@@ -72,13 +78,13 @@ module Hangman
   		  end
 		end
 
-		def handle_game_over
-			@guesses <= 0 ? puts "You lost. sorry. The word was #{@word}." : puts "You win!"
-			puts "Play again?"
+		def handle_game_over(acceptable_answers)
+			(@guesses <= 0) ? (puts "You lost. sorry. The word was #{@word}.") : (puts "You win!")
+			puts "Play again? (Yes/No)"
 			user_answer = gets.chomp.strip.downcase
-			['y', 'yes'].include?(user_answer) ? true : false
+			acceptable_answers.include?(user_answer) ? true : false
 		end
 
 	end
-end
+
 end
